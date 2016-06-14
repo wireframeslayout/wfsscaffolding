@@ -1,0 +1,7 @@
+.ruby-version
+.sass-cache
+.sass-cache/*
+node_module
+node_modules/*
+.css
+dist
