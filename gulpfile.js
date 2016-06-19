@@ -12,6 +12,8 @@ var concat = require('gulp-concat');
 var ignore = require('gulp-ignore');
 var webpack = require('gulp-webpack');
 var compass = require('gulp-compass');
+var _webpack = require('webpack');
+
 
 var dist_root = "./dist";
 var dev_root = "./dev";
@@ -51,9 +53,11 @@ gulp.task("sass", function() {
     gulp.src(dev_root+"/assets/scss/**/*.scss")
         .pipe(compass({
             sass: dev_root + "/assets/scss",
-            css: ".css"
+            css: dist_root + "/assets/css",
+            sourcemap: true,
+            style: "compressed"
+
         }))
-        .pipe(gulp.dest(dist_root+"/assets/css"))
         .pipe(browser.reload({stream:true}))
 });
 
@@ -91,7 +95,11 @@ gulp.task('webpack', ['template'], function () {
             entry: dev_root + '/assets/js/app.js',
             output: {
                 filename: 'bundle.js'
-            }
+            },
+            devtool: "#source-map",
+            plugins: [
+                new _webpack.optimize.UglifyJsPlugin()
+            ]
         }))
         //.pipe(uglify())
         .pipe(gulp.dest(dist_root + '/assets/js/'));
